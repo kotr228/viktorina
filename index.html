@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вікторина: Протидія насильству</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ Вікторина: Протидія насильству</h1>
+            <p class="subtitle">Перевірте свої знання про безпеку та протидію насильству</p>
+        </header>
+
+        <div id="start-screen" class="screen active">
+            <div class="welcome-box">
+                <h2>Вітаємо!</h2>
+                <p>Ця вікторина допоможе вам дізнатися більше про:</p>
+                <ul>
+                    <li>Види насильства та як їх розпізнати</li>
+                    <li>Способи захисту себе та інших</li>
+                    <li>Куди звертатися за допомогою</li>
+                    <li>Ваші права та можливості</li>
+                </ul>
+                <div class="user-info">
+                    <input type="text" id="user-name" placeholder="Ваше ім'я (необов'язково)" />
+                    <input type="email" id="user-email" placeholder="Ваш email (необов'язково)" />
+                </div>
+                <button id="start-btn" class="btn btn-primary">Почати вікторину</button>
+            </div>
+        </div>
+
+        <div id="quiz-screen" class="screen">
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <div class="question-counter">
+                <span id="current-question">1</span> / <span id="total-questions">10</span>
+            </div>
+
+            <div id="question-container" class="question-container">
+                <h2 id="question-text"></h2>
+                <div id="answers-container" class="answers-container"></div>
+            </div>
+
+            <div class="quiz-navigation">
+                <button id="prev-btn" class="btn btn-secondary" disabled>← Назад</button>
+                <button id="next-btn" class="btn btn-primary" disabled>Далі →</button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="screen">
+            <div class="results-box">
+                <h2>🎉 Вікторина завершена!</h2>
+                <div id="score-container" class="score-container">
+                    <div class="score-circle">
+                        <span id="score-percentage">0</span>%
+                    </div>
+                    <p>Ви відповіли правильно на <span id="correct-answers">0</span> з <span id="total-answers">10</span> питань</p>
+                </div>
+
+                <div id="feedback-message" class="feedback-message"></div>
+
+                <div class="resources">
+                    <h3>📞 Корисні контакти:</h3>
+                    <ul>
+                        <li><strong>Національна гаряча лінія:</strong> 116 123 (безкоштовно, цілодобово)</li>
+                        <li><strong>Поліція:</strong> 102</strong></li>
+                        <li><strong>Швидка допомога:</strong> 103</li>
+                        <li><strong>La Strada-Ukraine:</strong> 0 800 500 335 (протидія торгівлі людьми)</li>
+                    </ul>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="restart-btn" class="btn btn-primary">Пройти знову</button>
+                    <button id="share-btn" class="btn btn-secondary">Поділитися</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Створено для підвищення обізнаності про протидію насильству</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
