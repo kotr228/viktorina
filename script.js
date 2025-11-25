@@ -299,22 +299,6 @@ function animateScore(targetPercentage) {
 }
 
 async function sendResultsToGoogleSheets(correctCount, percentage, timeSpent) {
-    // Перевірка, чи налаштовано Google Sheets
-    if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
-        console.log('Google Sheets не налаштовано. Результати:');
-        console.log({
-            timestamp: new Date().toISOString(),
-            name: userName,
-            email: userEmail,
-            correctAnswers: correctCount,
-            totalQuestions: questions.length,
-            percentage: percentage,
-            timeSpent: timeSpent,
-            answers: userAnswers
-        });
-        return;
-    }
-
     const data = {
         timestamp: new Date().toISOString(),
         name: userName,
@@ -331,19 +315,64 @@ async function sendResultsToGoogleSheets(correctCount, percentage, timeSpent) {
         }))
     };
 
+    // Локальне збереження (завжди працює)
     try {
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-
-        console.log('Результати відправлено в Google Sheets');
+        const resultsHandler = new ResultsHandler();
+        resultsHandler.saveResult(data);
+        console.log('✅ Результати збережено локально');
     } catch (error) {
-        console.error('Помилка при відправці результатів:', error);
+        console.error('❌ Помилка локального збереження:', error);
+    }
+
+    // Відправка в Google Sheets (якщо налаштовано)
+    if (GOOGLE_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            console.log('✅ Результати відправлено в Google Sheets');
+        } catch (error) {
+            console.error('❌ Помилка відправки в Google Sheets:', error);
+        }
+    } else {
+        console.log('ℹ️ Google Sheets не налаштовано. Результати збережено тільки локально.');
+        console.log('ℹ️ Переглянути результати можна на сторінці admin.html');
+    }
+}
+
+// Клас для роботи з локальним збереженням
+class ResultsHandler {
+    constructor() {
+        this.storageKey = 'quiz_results';
+    }
+
+    saveResult(result) {
+        try {
+            const results = this.getAllResults();
+            results.push({
+                ...result,
+                id: Date.now()
+            });
+            localStorage.setItem(this.storageKey, JSON.stringify(results));
+            return true;
+        } catch (error) {
+            console.error('Помилка збереження:', error);
+            return false;
+        }
+    }
+
+    getAllResults() {
+        try {
+            const data = localStorage.getItem(this.storageKey);
+            return data ? JSON.parse(data) : [];
+        } catch (error) {
+            return [];
+        }
     }
 }
 
