@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адмін-панель - Результати вікторини</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .admin-header {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .actions-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .results-table-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .results-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .results-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .results-table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <header>
+            <h1 style="color: white; text-align: center; margin: 2rem 0;">📊 Адмін-панель вікторини</h1>
+        </header>
+
+        <div class="admin-header">
+            <h2>Статистика</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Всього проходжень</div>
+                    <div class="stat-value" id="total-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Середній бал</div>
+                    <div class="stat-value" id="avg-score">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Середній %</div>
+                    <div class="stat-value" id="avg-percentage">0%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Середній час</div>
+                    <div class="stat-value" id="avg-time">0с</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions-panel">
+            <h3>Дії</h3>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="refreshResults()">🔄 Оновити</button>
+                <button class="btn btn-secondary" onclick="exportJSON()">📥 Експорт JSON</button>
+                <button class="btn btn-secondary" onclick="exportCSV()">📊 Експорт CSV</button>
+                <button class="btn btn-secondary" onclick="clearResults()" style="background: #ef4444; color: white;">🗑️ Очистити всі</button>
+                <a href="index.html" class="btn btn-secondary">← Назад до вікторини</a>
+            </div>
+        </div>
+
+        <div class="results-table-container">
+            <h3>Детальні результати</h3>
+            <div id="results-content">
+                <div class="no-results">Завантаження...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align: center; padding: 2rem; color: white;">
+        <p>Адмін-панель вікторини "Протидія насильству"</p>
+    </footer>
+
+    <script src="results-handler.js"></script>
+    <script>
+        const resultsHandler = new ResultsHandler();
+
+        function refreshResults() {
+            updateStatistics();
+            displayResults();
+        }
+
+        function updateStatistics() {
+            const stats = resultsHandler.getStatistics();
+            document.getElementById('total-count').textContent = stats.total;
+            document.getElementById('avg-score').textContent = stats.averageScore;
+            document.getElementById('avg-percentage').textContent = stats.averagePercentage + '%';
+            document.getElementById('avg-time').textContent = stats.averageTime + 'с';
+        }
+
+        function displayResults() {
+            const results = resultsHandler.getAllResults();
+            const container = document.getElementById('results-content');
+
+            if (results.length === 0) {
+                container.innerHTML = '<div class="no-results">Поки що немає результатів</div>';
+                return;
+            }
+
+            let html = `
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Дата та час</th>
+                            <th>Ім'я</th>
+                            <th>Email</th>
+                            <th>Результат</th>
+                            <th>Відсоток</th>
+                            <th>Час</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            results.reverse().forEach(result => {
+                const date = new Date(result.timestamp);
+                const formattedDate = date.toLocaleString('uk-UA');
+                const badgeClass = result.percentage >= 70 ? 'badge-success' :
+                                  result.percentage >= 50 ? 'badge-warning' : 'badge-danger';
+
+                html += `
+                    <tr>
+                        <td>${formattedDate}</td>
+                        <td>${result.name || 'Анонім'}</td>
+                        <td>${result.email || '-'}</td>
+                        <td>${result.correctAnswers} / ${result.totalQuestions}</td>
+                        <td><span class="badge ${badgeClass}">${result.percentage}%</span></td>
+                        <td>${result.timeSpent}с</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function exportJSON() {
+            resultsHandler.exportToJSON();
+        }
+
+        function exportCSV() {
+            resultsHandler.exportToCSV();
+        }
+
+        function clearResults() {
+            if (resultsHandler.clearAllResults()) {
+                refreshResults();
+            }
+        }
+
+        // Автоматичне оновлення при завантаженні
+        document.addEventListener('DOMContentLoaded', refreshResults);
+
+        // Оновлення кожні 10 секунд
+        setInterval(refreshResults, 10000);
+    </script>
+</body>
+</html>
