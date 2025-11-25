@@ -1,6 +1,6 @@
 // Конфігурація для Google Sheets
 // ВАЖЛИВО: Замініть це значення на ваш URL Google Apps Script Web App
-const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqZmsLirQGsHvjCbzX0e2kRIHCME0RbfhzRiAgNyZf_d9k92I3fBSQsgUMYkQWutX2/exec';
 
 // Питання вікторини
 const questions = [
