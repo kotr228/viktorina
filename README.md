@@ -16,7 +16,7 @@
 
 - 📱 **Адаптивний дизайн** - працює на всіх пристроях (ПК, планшети, смартфони)
 - 🎨 **Сучасний інтерфейс** - привабливий дизайн з градієнтами та анімаціями
-- 📊 **10 питань** про протидію насильству
+- 📊 **15 питань** про протидію насильству
 - 💾 **Збереження результатів** - автоматична відправка даних у Google Таблиці
 - 📈 **Детальна статистика** - відсоток правильних відповідей, час проходження
 - 🔄 **Навігація** - можливість повертатися до попередніх питань
@@ -35,37 +35,70 @@ https://[ваш-username].github.io/viktorina/
 
 ```
 viktorina/
-├── index.html              # Головна сторінка вікторини
-├── style.css               # Стилі та адаптивний дизайн
-├── script.js               # Логіка вікторини та інтеграція з Google Sheets
-├── GOOGLE_SHEETS_SETUP.md  # Інструкції для налаштування Google Sheets
-└── README.md               # Документація проекту
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx          # Кореневий layout (мета-теги, мова, стилі)
+│   │   ├── page.tsx            # Головна сторінка
+│   │   ├── globals.css         # Стилі та адаптивний дизайн
+│   │   └── icon.svg            # Іконка сайту (favicon)
+│   ├── components/
+│   │   ├── Quiz.tsx            # Стан вікторини та перемикання екранів
+│   │   ├── StartScreen.tsx     # Стартовий екран (ім'я, email)
+│   │   ├── QuestionScreen.tsx  # Екран питання з навігацією
+│   │   ├── ResultsScreen.tsx   # Результати, контакти, «Поділитися»
+│   │   └── Footer.tsx          # Футер з посиланнями на автора
+│   ├── data/
+│   │   └── questions.ts        # Питання вікторини
+│   └── lib/
+│       ├── config.ts           # Налаштування (URL Google Apps Script)
+│       ├── quiz.ts             # Підрахунок балів і зворотний зв'язок
+│       ├── results.ts          # Збереження: localStorage + Google Sheets
+│       └── types.ts            # TypeScript-типи
+├── public/                     # Статичні файли
+├── .github/workflows/deploy.yml # Збірка та деплой на GitHub Pages
+├── next.config.ts              # Статичний експорт (output: "export")
+└── package.json
 ```
 
 ## 🛠️ Технології
 
-- **HTML5** - структура сторінки
-- **CSS3** - стилізація та анімації (градієнти, переходи, адаптивність)
-- **JavaScript (Vanilla)** - логіка вікторини, взаємодія з користувачем
+- **Next.js (App Router)** - фреймворк, статичний експорт у HTML
+- **React** - компоненти інтерфейсу
+- **TypeScript** - типізація
+- **CSS** - стилізація та анімації (градієнти, переходи, адаптивність)
 - **Google Apps Script** - збереження результатів у Google Таблиці
-- **GitHub Pages** - хостинг
+- **GitHub Pages + GitHub Actions** - хостинг і автоматичний деплой
 
 ## 📥 Встановлення та розгортання
 
-### Крок 1: Клонування репозиторію
+### Крок 1: Клонування та запуск локально
+
+Потрібен Node.js 20+.
 
 ```bash
 git clone https://github.com/[ваш-username]/viktorina.git
 cd viktorina
+npm install
+npm run dev        # http://localhost:3000
+```
+
+Інші команди:
+
+```bash
+npm run typecheck  # перевірка типів TypeScript
+npm run build      # статична збірка у папку out/
+npm start          # локальний перегляд зібраної папки out/
 ```
 
 ### Крок 2: Налаштування GitHub Pages
 
-1. Перейдіть у налаштування репозиторію на GitHub
-2. Знайдіть розділ "Pages"
-3. У розділі "Source" оберіть гілку `main` або `master` та папку `/ (root)`
-4. Натисніть "Save"
-5. Зачекайте кілька хвилин - ваш сайт буде доступний за адресою `https://[ваш-username].github.io/viktorina/`
+Сайт збирається і публікується автоматично через GitHub Actions (`.github/workflows/deploy.yml`) при кожному push у гілку за замовчуванням.
+
+1. Перейдіть у **Settings → Pages** репозиторію
+2. У розділі **Build and deployment → Source** оберіть **GitHub Actions**
+3. Зробіть push — після завершення workflow сайт буде доступний за адресою `https://[ваш-username].github.io/viktorina/`
+
+Детальніше — у [GITHUB_PAGES_SETUP.md](GITHUB_PAGES_SETUP.md).
 
 ### Крок 3: Налаштування Google Sheets (опціонально)
 
@@ -75,7 +108,7 @@ cd viktorina
 1. Створіть Google Таблицю
 2. Налаштуйте Google Apps Script Web App
 3. Скопіюйте URL Web App
-4. Вставте URL у файл `script.js` (змінна `GOOGLE_SCRIPT_URL`)
+4. Вставте URL у файл `src/lib/config.ts` (константа `GOOGLE_SCRIPT_URL`) або задайте змінну середовища `NEXT_PUBLIC_GOOGLE_SCRIPT_URL`
 5. Запуште зміни на GitHub
 
 ## 💡 Використання
@@ -102,10 +135,10 @@ cd viktorina
 
 ### Зміна питань
 
-Відредагуйте масив `questions` у файлі `script.js`:
+Відредагуйте масив `questions` у файлі `src/data/questions.ts`:
 
-```javascript
-const questions = [
+```typescript
+export const questions: Question[] = [
     {
         question: "Текст вашого питання?",
         answers: [
@@ -122,7 +155,7 @@ const questions = [
 
 ### Зміна кольорів
 
-Відредагуйте змінні кольорів у файлі `style.css`:
+Відредагуйте кольори у файлі `src/app/globals.css`:
 
 ```css
 /* Основний градієнт */
@@ -134,7 +167,7 @@ color: #667eea;
 
 ### Зміна контактів
 
-Відредагуйте розділ `.resources` у файлі `index.html`.
+Відредагуйте розділ «Корисні контакти» у файлі `src/components/ResultsScreen.tsx`.
 
 ## 📊 Аналітика та статистика
 

@@ -91,16 +91,15 @@ function doGet(e) {
 
 ## Крок 4: Налаштування вікторини
 
-1. Відкрийте файл `script.js` у вашому проекті
-2. Знайдіть рядок:
-```javascript
-const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+1. Відкрийте файл `src/lib/config.ts` у вашому проекті
+2. Замініть значення URL за замовчуванням на скопійований URL:
+```typescript
+export const GOOGLE_SCRIPT_URL: string =
+  process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL ||
+  "https://script.google.com/macros/s/...../exec";
 ```
-3. Замініть `'YOUR_GOOGLE_SCRIPT_URL_HERE'` на скопійований URL (включно з лапками):
-```javascript
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/...../exec';
-```
-4. Збережіть файл
+3. Або, не змінюючи код, задайте змінну середовища `NEXT_PUBLIC_GOOGLE_SCRIPT_URL` (локально — у файлі `.env.local`, див. `.env.example`)
+4. Збережіть файл і перезапустіть `npm run dev`
 
 ## Крок 5: Тестування
 

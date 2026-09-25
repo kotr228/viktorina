@@ -43,12 +43,7 @@ header h1 {
 
 /* Екрани */
 .screen {
-    display: none;
     animation: fadeIn 0.5s ease-in;
-}
-
-.screen.active {
-    display: block;
 }
 
 @keyframes fadeIn {
@@ -187,9 +182,10 @@ header h1 {
     margin-bottom: 2rem;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     min-height: 400px;
+    animation: fadeIn 0.4s ease-in;
 }
 
-#question-text {
+.question-text {
     color: #333;
     font-size: 1.5rem;
     margin-bottom: 2rem;
@@ -289,7 +285,7 @@ header h1 {
     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
 }
 
-#score-percentage {
+.score-percentage {
     font-size: 4rem;
     font-weight: bold;
     color: white;
@@ -343,12 +339,38 @@ header h1 {
     flex: 1;
 }
 
+.resources a {
+    color: inherit;
+    white-space: nowrap;
+}
+
 /* Footer */
 footer {
     text-align: center;
     padding: 2rem;
     color: white;
     opacity: 0.9;
+}
+
+.social-links {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    align-items: center;
+}
+
+.social-links a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity 0.3s;
+}
+
+.social-links a:hover {
+    opacity: 0.7;
 }
 
 /* Адаптивність */
@@ -363,7 +385,7 @@ footer {
         padding: 2rem 1.5rem;
     }
 
-    #question-text {
+    .question-text {
         font-size: 1.2rem;
     }
 
@@ -377,7 +399,7 @@ footer {
         height: 150px;
     }
 
-    #score-percentage {
+    .score-percentage {
         font-size: 3rem;
     }
 
