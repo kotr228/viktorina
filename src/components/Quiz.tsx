@@ -78,5 +78,5 @@ export default function Quiz({ questions }: QuizProps) {
     return <ResultsScreen result={result} onRestart={() => setStage("start")} />;
   }
 
-  return <StartScreen onStart={start} />;
+  return <StartScreen onStart={start} totalQuestions={questions.length} />;
 }

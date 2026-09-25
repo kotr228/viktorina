@@ -39,13 +39,15 @@ viktorina/
 │   ├── app/
 │   │   ├── layout.tsx          # Кореневий layout (мета-теги, мова, стилі)
 │   │   ├── page.tsx            # Головна сторінка
-│   │   ├── globals.css         # Стилі та адаптивний дизайн
+│   │   ├── globals.css         # Tailwind, базові стилі та анімації
 │   │   └── icon.svg            # Іконка сайту (favicon)
 │   ├── components/
 │   │   ├── Quiz.tsx            # Стан вікторини та перемикання екранів
 │   │   ├── StartScreen.tsx     # Стартовий екран (ім'я, email)
 │   │   ├── QuestionScreen.tsx  # Екран питання з навігацією
-│   │   ├── ResultsScreen.tsx   # Результати, контакти, «Поділитися»
+│   │   ├── ResultsScreen.tsx   # Результати, контакти, розбір відповідей
+│   │   ├── AnswerOption.tsx    # Картка варіанта відповіді (стани)
+│   │   ├── Logo.tsx            # Логотип SparkQuest
 │   │   └── Footer.tsx          # Футер з посиланнями на автора
 │   ├── data/
 │   │   └── questions.ts        # Питання вікторини
@@ -65,7 +67,8 @@ viktorina/
 - **Next.js (App Router)** - фреймворк, статичний експорт у HTML
 - **React** - компоненти інтерфейсу
 - **TypeScript** - типізація
-- **CSS** - стилізація та анімації (градієнти, переходи, адаптивність)
+- **Tailwind CSS 4** - стилізація, темна тема, анімації
+- **lucide-react** - іконки
 - **Google Apps Script** - збереження результатів у Google Таблиці
 - **GitHub Pages + GitHub Actions** - хостинг і автоматичний деплой
 
@@ -155,15 +158,14 @@ export const questions: Question[] = [
 
 ### Зміна кольорів
 
-Відредагуйте кольори у файлі `src/app/globals.css`:
+Інтерфейс (тема SparkQuest) побудований на **Tailwind CSS**: кольори задаються утилітами прямо в компонентах (`src/components/*.tsx`):
 
-```css
-/* Основний градієнт */
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+- `amber-400` / `yellow-400` — головні кнопки та акценти
+- `emerald-400` — прогрес і правильні відповіді
+- `rose-500` — помилки
+- `slate-900` / `slate-800/40` — темний фон і «скляні» картки
 
-/* Акцентний колір */
-color: #667eea;
-```
+Власні анімації (`animate-glow`, `animate-shake`, `animate-fade-in-up`) описані в `src/app/globals.css` у блоці `@theme`.
 
 ### Зміна контактів
 
