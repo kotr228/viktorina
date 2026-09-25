@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Темно-синій фон із закругленими кутами -->
+  <rect width="256" height="256" fill="#0F172A" rx="48" />
+  
+  <defs>
+    <!-- Ефект неонового світіння -->
+    <filter id="neon-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+    <!-- Градієнт від неонового жовтого до електричного м'ятного -->
+    <linearGradient id="neon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24" />
+      <stop offset="100%" stop-color="#34D399" />
+    </linearGradient>
+  </defs>
+
+  <!-- Промені світла навколо (Іскра) -->
+  <path d="M128 32 v16 M60 60 l12 12 M196 60 l-12 12 M32 128 h16 M224 128 h-16"
+        stroke="#FBBF24" stroke-width="6" stroke-linecap="round" opacity="0.4" />
+
+  <!-- Нитка розжарення у формі знака питання -->
+  <path d="M96 112 c0-32 64-40 64 0 c0 24-32 32-32 56"
+        fill="none" 
+        stroke="url(#neon-grad)" 
+        stroke-width="20" 
+        stroke-linecap="round"
+        filter="url(#neon-glow)" />
+
+  <!-- Крапка знака питання (відповідь знайдено) -->
+  <circle cx="128" cy="204" r="12" fill="#34D399" filter="url(#neon-glow)" />
+</svg>
